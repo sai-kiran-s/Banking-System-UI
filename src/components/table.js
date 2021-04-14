@@ -7,10 +7,11 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-import { Button } from '@material-ui/core';
+import { Button, Typography } from '@material-ui/core';
 import { profFetchHandler } from '../store/profileReducer'
 import { connect } from "react-redux";
 import { Link } from 'react-router-dom';
+import moment from 'moment'
 
 const useStyles = makeStyles((theme) => ({
   main:{
@@ -19,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
   },
   table: {
     maxWidth:'500',
+    border:'solid'
   },
   root: {
     flexGrow: 1,
@@ -62,14 +64,17 @@ const StyledTableRow = withStyles((theme) => ({
 
 
 const TableComponent = (props) => {
-  const fetchProfile = (id) =>{
-    props.profFetchHandler(id)
-  }
   console.log(props.columns)
   const classes = useStyles();
+  console.log(props.rows.length);
   return ( 
     <div style={{margin:'2%'}}>
-      <TableContainer component={Paper}>
+      {props.rows.length === 0?(
+        <Typography>
+          Looks like this account is yet to have a transaction!
+        </Typography>
+      ):(
+        <TableContainer component={Paper}>
         <Table stickyHeader className={classes.table}>
           <TableHead>
           <TableRow>
@@ -80,6 +85,7 @@ const TableComponent = (props) => {
           </TableRow>
           </TableHead>
           <TableBody>
+          
           {props.label === "viewcustomers"?(
           props.rows.map((row) => (
               <StyledTableRow key={row.name}>
@@ -104,9 +110,11 @@ const TableComponent = (props) => {
                 <StyledTableCell align="left">{row.name}</StyledTableCell>
                   <StyledTableCell align="left">
                 <Link  style={{textDecoration:"none",color:"white"}}   to={{     
-         pathname: '/transfer',
-         state:row.account_number
+         pathname: `/transfer`,
+         receiver:row.account_number,
+         sender:props.acc_no
         }
+        
   }> <Button color="primary">Transfer</Button></Link></StyledTableCell>
                   </StyledTableRow>
               ))
@@ -115,26 +123,22 @@ const TableComponent = (props) => {
                 <StyledTableRow key={row.name}>
                   <StyledTableCell align="left">{row.sender_account_number}</StyledTableCell>
                   <StyledTableCell align="left">{row.receiver_account_number}</StyledTableCell>
-                  <StyledTableCell align="left">{row.datetime}</StyledTableCell>
+                  <StyledTableCell align="left">{new Date(row.datetime).toUTCString()}</StyledTableCell>
                   <StyledTableCell align="left">{row.amount}</StyledTableCell>
-                  
+                  <StyledTableCell align="left"></StyledTableCell>
                   </StyledTableRow>
               ))
             )}
-            
-            
-            
-            
-            
         </TableBody>
         </Table>
       </TableContainer>
+      )}
+      
         </div>
    );
 }
 const mapStateToProps = (state) => {
   return {
-    profile: [...state.profile.customer]
   };
 };
 const mapDispatchToProps = (dispatch) => {

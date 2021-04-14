@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { alertFailure } from './alertReducer';
 
 const custFetchRequest = () => {
   return {
@@ -31,11 +32,11 @@ export const custFetchHandler = () => {
       .catch((err) => {
         if (err.response) {
           console.log("cust fetch failure");
-          console.log(err.response.data.message);
-          dispatch(custFetchFailure(err.response.data.message));
+          console.log(err.error);
+          dispatch(alertFailure(err.error));
         } else {
           console.log("not connected to internet");
-          dispatch(custFetchFailure("not connected to internet"));
+          dispatch(alertFailure("not connected to internet"));
         }
       })
       .finally(() => {
@@ -58,11 +59,11 @@ export const custExceptFetchHandler = (acc_no) => {
       .catch((err) => {
         if (err.response) {
           console.log("cust fetch failure");
-          console.log(err.response.data.message);
-          dispatch(custFetchFailure(err.response.data.message));
+          console.log(err.error);
+          dispatch(alertFailure(err.error));
         } else {
           console.log("not connected to internet");
-          dispatch(custFetchFailure("not connected to internet"));
+          dispatch(alertFailure("not connected to internet"));
         }
       })
       .finally(() => {
@@ -73,29 +74,29 @@ export const custExceptFetchHandler = (acc_no) => {
 
 
 const initState = {
-  isLoading:false,
-  customers:[],
-  errorMsg:""
+  isLoading: false,
+  customers: [],
+  errorMsg: ""
 };
 
 export const customerReducer = (state = { ...initState }, action) => {
   switch (action.type) {
     case "CUST_REQUEST":
-      return{
+      return {
         ...state,
-        isLoading:true
+        isLoading: true
       }
-      case "CUST_SUCCESS":
-      return{
+    case "CUST_SUCCESS":
+      return {
         ...state,
-        isLoading:false,
-        customers:[...action.payload]
+        isLoading: false,
+        customers: [...action.payload]
       }
-      case "CUST_FAILURE":
-      return{
+    case "CUST_FAILURE":
+      return {
         ...state,
-        isLoading:false,
-        errorMsg:action.payload
+        isLoading: false,
+        errorMsg: action.payload
       }
 
     default:

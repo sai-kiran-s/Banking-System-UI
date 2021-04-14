@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { alertFailure } from './alertReducer';
 
 const profFetchRequest = () => {
   return {
@@ -25,17 +26,17 @@ export const profFetchHandler = (acc_no) => {
       .get(`http://localhost:3000/api/viewcustomers/showcustomer/${acc_no}`)
       .then((res) => {
         console.log("prof fetch success", res.data.customer);
-        // localStorage.setItem("cust", JSON.stringify(res.data.data));
+        localStorage.setItem("acc_no", res.data.customer[0].account_number);
         dispatch(profFetchSuccess(res.data.customer));
       })
       .catch((err) => {
         if (err.response) {
           console.log("prof fetch failure");
-          console.log(err.response.data.message);
-          dispatch(profFetchFailure(err.response.data.message));
+          console.log(err.error);
+          dispatch(alertFailure(err.error));
         } else {
           console.log("not connected to internet");
-          dispatch(profFetchFailure("not connected to internet"));
+          dispatch(alertFailure("not connected to internet"));
         }
       })
       .finally(() => {
@@ -46,29 +47,29 @@ export const profFetchHandler = (acc_no) => {
 
 
 const initState = {
-  isLoading:false,
-  customer:[],
-  errorMsg:""
+  isLoading: false,
+  customer: [],
+  errorMsg: ""
 };
 
 export const profileReducer = (state = { ...initState }, action) => {
   switch (action.type) {
     case "PROF_REQUEST":
-      return{
+      return {
         ...state,
-        isLoading:true
+        isLoading: true
       }
-      case "PROF_SUCCESS":
-      return{
+    case "PROF_SUCCESS":
+      return {
         ...state,
-        isLoading:false,
-        customer:[...action.payload]
+        isLoading: false,
+        customer: [...action.payload]
       }
-      case "PROF_FAILURE":
-      return{
+    case "PROF_FAILURE":
+      return {
         ...state,
-        isLoading:false,
-        errorMsg:action.payload
+        isLoading: false,
+        errorMsg: action.payload
       }
 
     default:

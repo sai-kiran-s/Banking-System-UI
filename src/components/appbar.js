@@ -43,10 +43,10 @@ const Appbar = () => {
         <AppBar position="static" color="secondary">
           <Toolbar>
             <Typography variant="h6" className={classes.title}>
-              Banking System
+            <Link to="/home" style={{textDecoration:"none",color:"white"}}>Banking System</Link> 
             </Typography>
-            <Link to="/home" style={{textDecoration:"none",color:"white"}}><Button color="inherit">Home</Button></Link>
-            <Link to="/viewcustomers" style={{textDecoration:"none",color:"white"}}><Button color="inherit">View Customers</Button></Link>
+           <Link to="/viewtransactions" style={{textDecoration:"none",color:"white"}}><Button color="inherit">View All Transactions</Button></Link>
+            <Link to="/viewcustomers" style={{textDecoration:"none",color:"white"}}><Button color="inherit">View All Customers</Button></Link>
           </Toolbar>
         </AppBar>
       </div>

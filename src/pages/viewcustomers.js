@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ViewCustomers = (props) => {
   useEffect(()=>{
+    localStorage.removeItem('locreceiver')
     props.custFetchHandler();
   },[])
   const columns = ["Account Number","Email Id","Name"]

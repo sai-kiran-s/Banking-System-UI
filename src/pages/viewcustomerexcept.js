@@ -9,8 +9,6 @@ import { useLocation } from 'react-router';
 
 const useStyles = makeStyles((theme) => ({
   main:{
-    backgroundColor:"#D5D862",
-    minHeight:"100vh"
   },
   heading:{
     marginTop: theme.spacing(2),
@@ -28,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 const ViewCustomersExcept = (props) => {
   let loc = useLocation().state;
   const custFetch = () => {
-    console.log(loc);
+    console.log(props.acc_no);
     props.custExceptFetchHandler(loc)
   }
   useEffect(() => {
@@ -37,19 +35,22 @@ const ViewCustomersExcept = (props) => {
   const columns = ["Account Number","Email Id","Name"]
   const rows = [...props.customers]
   const classes = useStyles();
+
   return ( 
     <div className={classes.main}>
       <Appbar/>
       <Typography variant="h6" className={classes.heading}>
         Transfer To
         </Typography>
-        <Table columns={columns} rows={rows} label="viewcustomersexcept"/>
+        <Table columns={columns} rows={rows} acc_no={props.acc_no} label="viewcustomersexcept"/>
     </div>
    );
 }
 const mapStateToProps = (state) => {
+  console.log(state);
   return {
-    customers:[...state.customer.customers]
+    customers:[...state.customer.customers],
+    acc_no:state.profile.customer[0]?state.profile.customer[0].account_number:localStorage.getItem('acc_no')
   };
 };
 const mapDispatchToProps = (dispatch) => {

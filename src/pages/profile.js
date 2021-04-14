@@ -37,6 +37,7 @@ function Profile(props) {
     props.profFetchHandler(loc)
   }
   useEffect(() => {
+    localStorage.removeItem('locreceiver')
     console.log("hello")
     profFetch()
   }, [])
@@ -87,8 +88,10 @@ function Profile(props) {
             display:"flex",
             flexDirection: "row"
           }}>
+            <Link  style={{textDecoration:"none",color:"white"}} to={{pathname:'/viewcustomertransactions',state:props.profile.account_number}}>
             <Button color="primary">View Transactions</Button>
-            <Link  style={{textDecoration:"none",color:"white"}} to={{pathname:'/viewspecifictransactions',state:props.profile.account_number}}>
+            </Link>
+            <Link  style={{textDecoration:"none",color:"white"}} to={{pathname:'/viewcustomersexcept',state:props.profile.account_number}}>
             <Button color="primary">Transfer Money</Button>
             </Link>
             </div>
